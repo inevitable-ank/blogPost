@@ -17,13 +17,24 @@ const ManagePosts = () => {
     }, []);
 
     const handleDelete = async (id) => {
+        const token = localStorage.getItem('token');  // ✅ Token Added
+        if (!token) {
+            alert('You are not authorized. Please login again.');
+            return;
+        }
+
         if (window.confirm('Are you sure you want to delete this post?')) {
             try {
-                await axios.delete(`${process.env.REACT_APP_API_URL}/api/posts/${id}`);
+                await axios.delete(`${process.env.REACT_APP_API_URL}/api/posts/${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`  // ✅ Token Sent Correctly
+                    }
+                });
                 setPosts(posts.filter(post => post._id !== id));
                 alert('Post deleted successfully!');
             } catch (error) {
-                alert('Failed to delete the post.');
+                alert('Failed to delete the post. Ensure you have admin rights.');
+                console.error('Error:', error);
             }
         }
     };

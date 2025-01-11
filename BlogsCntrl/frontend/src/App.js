@@ -5,9 +5,10 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import BlogPost from './components/Blog/BlogPost';
-import AdminPanel from './pages/AdminPanel';
+import AdminDashboard from './pages/AdminDashboard';
 import CreatePost from './components/Admin/CreatePost';
 import ManagePosts from './components/Admin/ManagePosts';
+import ManageUsers from './components/Admin/ManageUsers';
 import NotFound from './pages/NotFound';
 import Header from './components/Shared/Header';
 import Footer from './components/Shared/Footer';
@@ -19,18 +20,19 @@ const App = () => {
             <Router>
                 <Header />
                 <Routes>
-                    {/* Public Routes */}
+                    {/* ✅ Public Routes */}
                     <Route path="/" element={<Home />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/blog/:id" element={<BlogPost />} />
 
-                    {/* Admin Protected Routes */}
-                    <Route path="/admin" element={<ProtectedRoute role="admin"><AdminPanel /></ProtectedRoute>} />
-                    <Route path="/admin/create-post" element={<ProtectedRoute role="admin"><CreatePost /></ProtectedRoute>} />
+                    {/* ✅ Admin Protected Routes */}
+                    <Route path="/admin" element={<ProtectedRoute role="admin"><AdminDashboard /></ProtectedRoute>} />
+                    <Route path="/create-post" element={<ProtectedRoute role="admin"><CreatePost /></ProtectedRoute>} />
                     <Route path="/admin/manage-posts" element={<ProtectedRoute role="admin"><ManagePosts /></ProtectedRoute>} />
+                    <Route path="/admin/manage-users" element={<ProtectedRoute role="admin"><ManageUsers /></ProtectedRoute>} />
 
-                    {/* 404 Not Found Page  */}
+                    {/* ✅ Catch-All Route for 404 */}
                     <Route path="*" element={<NotFound />} />
                 </Routes>
                 <Footer />

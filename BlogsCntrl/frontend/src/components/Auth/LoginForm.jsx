@@ -1,10 +1,12 @@
 import React, { useState, useContext } from 'react';
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import api from '../../services/api';
 import AuthContext from '../../context/AuthContext';
 
 const LoginForm = () => {
     const [formData, setFormData] = useState({ email: '', password: '' });
     const { login } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -13,11 +15,13 @@ const LoginForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/login`, formData);
-            login(response.data.token);
-            alert('Login Successful');
+            const response = await api.post('/api/auth/login', formData);
+            login(response.data.token);  // ✅ Save token on successful login
+            alert('Login successful!');
+            navigate('/');  // ✅ Redirect to Home
         } catch (error) {
-            alert('Invalid credentials, please try again.');
+            alert('Invalid credentials. Please try again.');
+            console.error('Login Error:', error);
         }
     };
 
@@ -25,7 +29,7 @@ const LoginForm = () => {
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
             <form onSubmit={handleSubmit} className="p-8 bg-white shadow-md rounded-lg w-96">
                 <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
-                
+
                 <input
                     type="email"
                     name="email"

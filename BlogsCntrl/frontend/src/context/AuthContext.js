@@ -10,18 +10,33 @@ export const AuthProvider = ({ children }) => {
         const token = localStorage.getItem('token');
         if (token) {
             try {
-                const decoded = jwtDecode(token);
-                setUser(decoded);
+                const decodedToken = jwtDecode(token);
+
+                // ✅ Token Expiry Check Added
+                if (decodedToken.exp * 1000 < Date.now()) {
+                    console.warn("Token expired. Logging out.");
+                    localStorage.removeItem('token');
+                    setUser(null);
+                } else {
+                    setUser(decodedToken);
+                }
             } catch (error) {
-                console.error("Invalid token:", error);
+                console.error("Invalid token detected, logging out user.");
+                localStorage.removeItem('token');
+                setUser(null);
             }
         }
     }, []);
 
     const login = (token) => {
         localStorage.setItem('token', token);
-        const decodedToken = jwtDecode(token);
-        setUser(decodedToken);
+        try {
+            const decodedToken = jwtDecode(token);
+            setUser(decodedToken);
+        } catch (error) {
+            console.error('Failed to decode token.');
+            setUser(null);
+        }
     };
 
     const logout = () => {
