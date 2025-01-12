@@ -11,7 +11,7 @@ const authMiddleware = (req, res, next) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        // ✅ Check Token Expiry on Backend
+        // ✅ Expiry Check in Backend
         if (decoded.exp * 1000 < Date.now()) {
             return res.status(401).json({ message: 'Token has expired.' });
         }
@@ -19,7 +19,7 @@ const authMiddleware = (req, res, next) => {
         req.user = decoded;
         next();
     } catch (error) {
-        res.status(401).json({ message: 'Unauthorized: Invalid token.' });
+        return res.status(401).json({ message: 'Invalid token provided.' });
     }
 };
 

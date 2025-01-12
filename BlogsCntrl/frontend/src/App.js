@@ -32,7 +32,7 @@ const App = () => {
                     <Route path="/admin/manage-posts" element={<ProtectedRoute role="admin"><ManagePosts /></ProtectedRoute>} />
                     <Route path="/admin/manage-users" element={<ProtectedRoute role="admin"><ManageUsers /></ProtectedRoute>} />
 
-                    {/* ✅ Catch-All Route for 404 */}
+                    {/* ✅ 404 Fallback */}
                     <Route path="*" element={<NotFound />} />
                 </Routes>
                 <Footer />

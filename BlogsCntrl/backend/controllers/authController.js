@@ -41,24 +41,17 @@ const login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        // ✅ Validate inputs
-        if (!email || !password) {
-            return res.status(400).json({ message: 'All fields are required.' });
-        }
-
-        // ✅ Check if the user exists
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
-        // ✅ Validate the password
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
-        // ✅ Generate a JWT Token
+        // ✅ Generate Token with Expiry
         const token = jwt.sign(
             { id: user._id, role: user.role },
             process.env.JWT_SECRET,

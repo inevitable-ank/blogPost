@@ -5,7 +5,7 @@ const { roleMiddleware } = require('../middleware/roleMiddleware');
 
 const router = express.Router();
 
-// ✅ Promote User to Admin (Admin Only)
+// ✅ Promote a User to Admin (Admin Only)
 router.patch('/promote/:id', authMiddleware, roleMiddleware('admin'), promoteUserToAdmin);
 
 // ✅ Fetch All Users (Admin Only)

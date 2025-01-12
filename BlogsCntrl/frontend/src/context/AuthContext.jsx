@@ -11,17 +11,16 @@ export const AuthProvider = ({ children }) => {
         if (token) {
             try {
                 const decodedToken = jwtDecode(token);
-
-                // ✅ Token Expiry Check Added
+                
                 if (decodedToken.exp * 1000 < Date.now()) {
-                    console.warn("Token expired. Logging out.");
+                    console.warn("Token expired, logging out.");
                     localStorage.removeItem('token');
                     setUser(null);
                 } else {
                     setUser(decodedToken);
                 }
             } catch (error) {
-                console.error("Invalid token detected, logging out user.");
+                console.error("Invalid token detected.");
                 localStorage.removeItem('token');
                 setUser(null);
             }
@@ -34,7 +33,8 @@ export const AuthProvider = ({ children }) => {
             const decodedToken = jwtDecode(token);
             setUser(decodedToken);
         } catch (error) {
-            console.error('Failed to decode token.');
+            console.error("Error decoding token during login.");
+            localStorage.removeItem('token');
             setUser(null);
         }
     };
@@ -44,8 +44,21 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
     };
 
+    // ✅ Add a Method to Refresh User State Manually (After Role Change)
+    const refreshUser = () => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            try {
+                const decodedToken = jwtDecode(token);
+                setUser(decodedToken);
+            } catch (error) {
+                console.error("Error refreshing user data.");
+            }
+        }
+    };
+
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ user, login, logout, refreshUser }}>
             {children}
         </AuthContext.Provider>
     );
