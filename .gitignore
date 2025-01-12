@@ -1,0 +1,6 @@
+# Ignore environment files
+BlogsCntrl/frontend/.env
+BlogsCntrl/backend/.env
+
+# Ignore node_modules (if not already ignored)
+node_modules/
